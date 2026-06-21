@@ -32,6 +32,7 @@ const register = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        createdAt: user.createdAt,
       },
     });
   } catch (error) {
@@ -55,10 +56,7 @@ const login = async (req, res) => {
       });
     }
 
-    const validPassword = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
       return res.status(401).json({
@@ -71,20 +69,44 @@ const login = async (req, res) => {
         userId: user.id,
         email: user.email,
       },
-      "super-secret-key",
+      process.env.JWT_SECRET || "super-secret-key",
       {
         expiresIn: "7d",
       }
     );
 
     res.json({
+      message: "Login successful",
       token,
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
+        createdAt: user.createdAt,
       },
     });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json(users);
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -95,4 +117,5 @@ const login = async (req, res) => {
 module.exports = {
   register,
   login,
+  getUsers,
 };
