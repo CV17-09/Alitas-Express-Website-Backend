@@ -7,12 +7,20 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://alitas-express-website-frontend-8km.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://alitas-express-website-frontend-8km.vercel.app",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
