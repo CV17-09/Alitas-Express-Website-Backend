@@ -9,7 +9,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [
+      "http://localhost:3000",
+      "https://alitas-express-website-frontend-8km.vercel.app",
+    ],
     credentials: true,
   })
 );
