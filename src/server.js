@@ -10,19 +10,30 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://alitas-express-website-frontend.vercel.app",
-  "https://alitas-express-website-frontend-8km.vercel.app",
-  "https://alitas-express-website-frontend-cv17-09s-projects.vercel.app",
-  "https://alitas-express-website-frontend-git-main-cv17-09s-projects.vercel.app",
-  "https://alitas-express-website-frontend-jffvffri7-cv17-09s-projects.vercel.app",
 ];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+    origin: (origin, callback) => {
+      // Allow requests with no origin (Postman, server-to-server requests)
+      if (!origin) {
         return callback(null, true);
       }
-      return callback(new Error("Not allowed by CORS"));
+
+      // Allow localhost and production domain
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow any Vercel preview deployment for this project
+      if (
+        origin.endsWith(".vercel.app") &&
+        origin.includes("alitas-express-website-frontend")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
     },
     credentials: true,
   })
