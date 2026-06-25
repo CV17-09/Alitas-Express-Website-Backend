@@ -9,17 +9,19 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "https://alitas-express-website-frontend.vercel.app",
   "https://alitas-express-website-frontend-8km.vercel.app",
+  "https://alitas-express-website-frontend-cv17-09s-projects.vercel.app",
+  "https://alitas-express-website-frontend-git-main-cv17-09s-projects.vercel.app",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(null, true);
       }
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
