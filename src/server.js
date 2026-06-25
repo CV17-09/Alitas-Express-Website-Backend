@@ -13,6 +13,7 @@ const allowedOrigins = [
   "https://alitas-express-website-frontend-8km.vercel.app",
   "https://alitas-express-website-frontend-cv17-09s-projects.vercel.app",
   "https://alitas-express-website-frontend-git-main-cv17-09s-projects.vercel.app",
+  "https://alitas-express-website-frontend-jffvffri7-cv17-09s-projects.vercel.app",
 ];
 
 app.use(
